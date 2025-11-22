@@ -41,5 +41,14 @@ public class Department {
         return false;
     }
     
-    
+    /**
+     * Display all valid departments to the user
+     * Used when adding new employees
+     */
+    public static void displayDepartments() {
+        System.out.println("\n=== VALID DEPARTMENTS ===");
+        for (int i = 0; i < VALID_DEPARTMENTS.length; i++) {
+            System.out.println((i + 1) + ". " + VALID_DEPARTMENTS[i]);
+        }
+    }
 }
