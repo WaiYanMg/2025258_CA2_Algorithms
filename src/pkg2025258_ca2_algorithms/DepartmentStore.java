@@ -15,6 +15,10 @@ import java.util.List;
  *
  * @author Wai
  */
+/**
+ * Core business logic class - handles all data processing and algorithms
+ * Implements Quick Sort, Binary Search, and file operations
+ */
 public class DepartmentStore {
     
     private ArrayList<Employee> employees;    // Stores all employee records
