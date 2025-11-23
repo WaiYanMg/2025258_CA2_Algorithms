@@ -19,207 +19,151 @@ Provides user-friendly menu navigation for Department Store System
 public class Main {
 
     
-    private DepartmentStore departmentStore; // Handles all business logic
-    private Scanner scanner;                //For user input
-    
-     // Constructor - initialize components
-     public Main() {
-        departmentStore = new DepartmentStore();
-        scanner = new Scanner(System.in);
-    }
-     
-    // DISPLAY MAIN CONSOLE MENU SYSTEM
- 
-    public void displayMainMenu() {
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String[] args) {
+        // Initialize scanner and store
+        Scanner scanner = new Scanner(System.in);
+        DepartmentStore store = new DepartmentStore();
+        
         System.out.println("\n" + "=".repeat(60));
         System.out.println("           DEPARTMENT STORE MANAGEMENT SYSTEM");
         System.out.println("=".repeat(60));
-        System.out.println("1. LOAD DATA FROM FILE");
-        System.out.println("2. SORT EMPLOYEES (Quick Sort)");
-        System.out.println("3. SEARCH EMPLOYEE (Binary Search)");
-        System.out.println("4. ADD NEW EMPLOYEE");
-        System.out.println("5. BUILD ORGANIZATIONAL TREE");
-        System.out.println("6. DISPLAY ALL EMPLOYEES");
-        System.out.println("7. EXIT");
-        System.out.println("=".repeat(60));
-        System.out.print("Please select an option (1-7): ");
-    }
-    
-    // Main program loop - continuously displays menu and handles user choices
- public void run() {
-        System.out.println("Starting Employee Management System...");
         
-        // Main program loop
-        while (true) {
-            displayMainMenu();
-            String input = scanner.nextLine().trim();
+        // Keep asking for filename until valid file is loaded
+        boolean fileLoaded = false;
+        while (!fileLoaded) {
+            System.out.print("Please enter the filename to read (Applicants_Form.txt or Applicants_Form): ");
+            String filename = scanner.nextLine().trim();
             
-            // Handle user selection
-            switch (input) {
-                case "1": loadDataFromFile(); break;
-                case "2": sortEmployees(); break;
-                case "3": searchEmployee(); break;
-                case "4": addNewEmployee(); break;
-                case "5": buildEmployeeTree(); break;
-                case "6": displayAllEmployees(); break;
-                case "7": exitProgram(); break;
-                default: System.out.println("Invalid option! Please enter 1-7.");
+            // Auto add .txt extension if not included
+            if (!filename.endsWith(".txt")) {
+                filename = filename + ".txt";
+            }
+            
+            // Try to load the data from file
+            fileLoaded = store.loadDataFromFile(filename);
+            
+            if (!fileLoaded) {
+                System.out.println("Please try again.\n");
             }
         }
-    }
-    
-    // Option 1: Load employee data from file
-    private void loadDataFromFile() {
-        System.out.println("\n--- LOAD DATA ---");
-        System.out.print("Enter filename: ");
-        String filename = scanner.nextLine().trim();
         
-        // Use default file if none provided
-        if (filename.isEmpty()) {
-            filename = "Applicants_Form.txt";
+        // Menu loop - keeps running until user exits
+        boolean running = true;
+        while (running) {
+            System.out.println("\n" + "=".repeat(60));
+            System.out.println("Do You wish to SORT or SEARCH:");
+            System.out.println("1. SORT (Quick Sort)");
+            System.out.println("2. SEARCH (Binary Search)");
+            System.out.println("3. ADD RECORDS");
+            System.out.println("4. BUILD ORGANIZATIONAL TREE");
+            System.out.println("5. DISPLAY ALL EMPLOYEES");
+            System.out.println("6. EXIT");
+            System.out.println("=".repeat(60));
+            System.out.print("Please select an option (1-6): ");
+            
+            // Get user input
+            int choice = 0;
+            try {
+                choice = Integer.parseInt(scanner.nextLine().trim());
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid input! Please enter a number.");
+                continue;
+            }
+            
+            // Process user choice
+            switch (choice) {
+                case 1:
+                    // SORT using Quick Sort
+                    store.sortEmployees();
+                    break;
+                    
+                case 2:
+                    // SEARCH using Binary Search
+                    System.out.print("Enter last name to search: ");
+                    String searchName = scanner.nextLine().trim();
+                    store.searchEmployee(searchName);
+                    break;
+                    
+                case 3:
+                    // ADD NEW EMPLOYEE
+                    addNewEmployee(scanner, store);
+                    break;
+                    
+                case 4:
+                    // BUILD ORGANIZATIONAL TREE
+                    store.buildEmployeeTree();
+                    break;
+                    
+                case 5:
+                    // DISPLAY ALL EMPLOYEES
+                    store.displayAllEmployees();
+                    break;
+                    
+                case 6:
+                    // EXIT PROGRAM
+                    System.out.println("Thank you for using the system. Goodbye!");
+                    running = false;
+                    break;
+                    
+                default:
+                    System.out.println("Invalid option! Please select 1-6.");
+            }
         }
-        
-        departmentStore.loadDataFromFile(filename);
+        scanner.close();
     }
     
-    //Option 2: Sort employees using Quick Sort algorithm
-    private void sortEmployees() {
-        System.out.println("\n--- SORT EMPLOYEES ---");
-        departmentStore.sortEmployees();
-    }
-    
-    // Option 3: Search for employee using Binary Search
-    private void searchEmployee() {
-        System.out.println("\n--- SEARCH EMPLOYEE ---");
-        System.out.print("Enter last name to search: ");
-        String searchName = scanner.nextLine().trim();
+    /**
+     * Helper method to add a new employee
+     * Collects all required information from user
+     * @param scanner Scanner for user input
+     * @param store DepartmentStore to add employee to
+     */
+    private static void addNewEmployee(Scanner scanner, DepartmentStore store) {
+        System.out.println("\n=== ADD NEW EMPLOYEE ===");
         
-        if (searchName.isEmpty()) {
-            System.out.println("Search name cannot be empty!");
-            return;
-        }
-        
-        departmentStore.searchEmployee(searchName);
-    }
-    
-    // Option 4: Add a new employee to the system
-    private void addNewEmployee() {
-        System.out.println("\n--- ADD NEW EMPLOYEE ---");
-        
-        // Get required employee information with validation
-        System.out.print("First Name: ");
+        // Collect employee details
+        System.out.print("Enter First Name: ");
         String firstName = scanner.nextLine().trim();
-        if (firstName.isEmpty()) {
-            System.out.println("First name is required!");
-            return;
-        }
         
-        System.out.print("Last Name: ");
+        System.out.print("Enter Last Name: ");
         String lastName = scanner.nextLine().trim();
-        if (lastName.isEmpty()) {
-            System.out.println("Last name is required!");
-            return;
-        }
         
-        System.out.print("Gender: ");
+        System.out.print("Enter Gender (Male/Female): ");
         String gender = scanner.nextLine().trim();
         
-        System.out.print("Email: ");
+        System.out.print("Enter Email: ");
         String email = scanner.nextLine().trim();
-        if (!email.contains("@")) {
-            System.out.println("Invalid email format!");
-            return;
-        }
         
-        // Get and validate salary
-        System.out.print("Salary: ");
-        double salary;
+        // Get salary with validation
+        System.out.print("Enter Salary: ");
+        double salary = 0;
         try {
             salary = Double.parseDouble(scanner.nextLine().trim());
-            if (salary < 0) {
-                System.out.println("Salary cannot be negative!");
-                return;
-            }
         } catch (NumberFormatException e) {
-            System.out.println("Invalid salary format!");
-            return;
+            System.out.println("Invalid salary! Setting to 0.");
         }
         
-        // Department selection from predefined list
-        System.out.println("\nAvailable Departments:");
-        String[] departments = Department.getValidDepartments();
-        for (int i = 0; i < departments.length; i++) {
-            System.out.println((i + 1) + ". " + departments[i]);
-        }
-        System.out.print("Select department (1-9): ");
-        String department;
-        try {
-            int choice = Integer.parseInt(scanner.nextLine());
-            if (choice < 1 || choice > departments.length) {
-                System.out.println("Invalid department choice!");
-                return;
-            }
-            department = departments[choice - 1];
-        } catch (NumberFormatException e) {
-            System.out.println("Invalid input!");
-            return;
-        }
+        // Show valid departments and get input
+        Department.displayDepartments();
+        System.out.print("Enter Department: ");
+        String department = scanner.nextLine().trim();
         
-        // Position selection (optional)
-        System.out.println("\nAvailable Positions:");
-        String[] positions = Manager.getValidPositions();
-        for (int i = 0; i < positions.length; i++) {
-            System.out.println((i + 1) + ". " + positions[i]);
-        }
-        System.out.print("Select position (1-10, or Enter to skip): ");
-        String positionInput = scanner.nextLine().trim();
-        String position = "";
-        if (!positionInput.isEmpty()) {
-            try {
-                int choice = Integer.parseInt(positionInput);
-                if (choice >= 1 && choice <= positions.length) {
-                    position = positions[choice - 1];
-                }
-            } catch (NumberFormatException e) {
-                // Position remains empty if invalid input
-            }
-        }
+        // Show valid positions and get input
+        Manager.displayPositions();
+        System.out.print("Enter Position (or press Enter to skip): ");
+        String position = scanner.nextLine().trim();
         
-        // Additional information
-        System.out.print("Job Title: ");
+        System.out.print("Enter Job Title: ");
         String jobTitle = scanner.nextLine().trim();
         
-        System.out.print("Company: ");
+        System.out.print("Enter Company: ");
         String company = scanner.nextLine().trim();
         
-        // Add the new employee to the system
-        departmentStore.addNewEmployee(firstName, lastName, gender, email, salary, 
-                                     department, position, jobTitle, company);
+        // Add employee to store
+        store.addNewEmployee(firstName, lastName, gender, email, 
+                            salary, department, position, jobTitle, company);
     }
-    
-    //Option 5: Build organizational hierarchy tree
-    private void buildEmployeeTree() {
-        System.out.println("\n--- BUILD ORGANIZATIONAL TREE ---");
-        departmentStore.buildEmployeeTree();
-    }
-    
-    //Option 6: Display all employees in the system
-    private void displayAllEmployees() {
-        System.out.println("\n--- DISPLAY ALL EMPLOYEES ---");
-        departmentStore.displayAllEmployees();
-    }
-    
-    //Option 7: Exit the application
-    private void exitProgram() {
-        System.out.println("\nThank you for using Employee Management System!");
-        System.out.println("Goodbye!");
-        System.exit(0);
-    }
-    
-    //     MAIN 
-    public static void main(String[] args) {
-        Main console_app=new Main();
-        console_app.run();
-    }
-    
 }

@@ -35,8 +35,9 @@ public class DepartmentStore {
     /**
      * Load employee data from CSV file
      * @param filename The name of the file to load
+     * @return true if file loaded successfully, false otherwise
      */
-    public void loadDataFromFile(String filename) {
+    public boolean loadDataFromFile(String filename) {
         BufferedReader fileReader = null;
         int successfulRecords = 0;
         
@@ -46,7 +47,7 @@ public class DepartmentStore {
             
             if (!file.exists()) {
                 System.out.println("File not found: " + file.getAbsolutePath());
-                return;
+                return false;
             }
             
             // Open file for reading
@@ -91,8 +92,11 @@ public class DepartmentStore {
                 displayFirst20Employees();
             }
             
+            return true;
+            
         } catch (Exception e) {
             System.out.println("Error loading file: " + e.getMessage());
+            return false;
         } finally {
             // Ensure file is closed properly
             closeFileReader(fileReader);
