@@ -89,7 +89,7 @@ public class DepartmentStore {
             if (!employees.isEmpty()) {
                 System.out.println("Auto-sorting loaded data...");
                 quickSort(employees, 0, employees.size() - 1);
-                displayFirst20Employees();
+                displayAllSortedEmployees();  // Display ALL employees after sorting
             }
             
             return true;
@@ -121,7 +121,7 @@ public class DepartmentStore {
         long endTime = System.currentTimeMillis();
         
         System.out.println("Sorting completed in " + (endTime - startTime) + " ms");
-        displayFirst20Employees();
+        displayAllSortedEmployees();  // Display ALL employees after sorting
     }
     
      /**
@@ -214,7 +214,7 @@ public class DepartmentStore {
             return;
         }
         
-        System.out.println("ALL EMPLOYEES (" + employees.size() + " records)");
+        System.out.println("\nALL EMPLOYEES (" + employees.size() + " records)");
         System.out.println("=".repeat(100));
         System.out.printf("%-15s %-15s %-20s %-15s %-10s\n", 
             "First Name", "Last Name", "Department", "Position", "Salary");
@@ -402,19 +402,18 @@ public class DepartmentStore {
     
   
     /**
-     * Display first 20 employees in compact format
-     * Used after loading and sorting operations
+     * Display all sorted employees in compact format
+     * Used after loading and sorting operations to show complete dataset
      */
-    private void displayFirst20Employees() {
-        System.out.println("\nFIRST 20 SORTED EMPLOYEES");
-        System.out.println("=".repeat(80));
+    private void displayAllSortedEmployees() {
+        System.out.println("\nALL SORTED EMPLOYEES (" + employees.size() + " records)");
+        System.out.println("=".repeat(100));
         System.out.printf("%-15s %-15s %-20s %-15s %-10s\n", 
             "First Name", "Last Name", "Department", "Position", "Salary");
-        System.out.println("=".repeat(80));
+        System.out.println("=".repeat(100));
         
-        int displayCount = Math.min(20, employees.size());
-        for (int i = 0; i < displayCount; i++) {
-            Employee emp = employees.get(i);
+        // Display all employees - no limit
+        for (Employee emp : employees) {
             System.out.printf("%-15s %-15s %-20s %-15s $%-9.2f\n",
                 emp.getFirstName(),
                 emp.getLastName(),
@@ -422,8 +421,9 @@ public class DepartmentStore {
                 emp.getPosition().isEmpty() ? "N/A" : emp.getPosition(),
                 emp.getSalary());
         }
+        
+        System.out.println("=".repeat(100));
+        System.out.println("Total records displayed: " + employees.size());
     }
-
-  
     
 }
