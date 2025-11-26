@@ -13,6 +13,7 @@ package pkg2025258_ca2_algorithms;
 //Used for building organizational hierarchy
 public class TreeNode {
   
+    
     Employee employee;
     TreeNode left;
     TreeNode right;

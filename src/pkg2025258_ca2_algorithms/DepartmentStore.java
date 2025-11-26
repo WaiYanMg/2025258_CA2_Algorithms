@@ -24,12 +24,14 @@ public class DepartmentStore {
     private ArrayList<Employee> employees;    // Stores all employee records
     private EmployeeBinaryTree employeeTree;  // For organizational hierarchy
     private boolean isDataLoaded;             // Flag to check if data is loaded
+    private boolean isSorted;                 // Flag to check if data is sorted
     
     // Constructor - initialize empty data structures
     public DepartmentStore() {
         employees = new ArrayList<>();
         employeeTree = new EmployeeBinaryTree();
         isDataLoaded = false;
+        isSorted = false;
     }
     
     /**
@@ -84,12 +86,12 @@ public class DepartmentStore {
             System.out.println("File loaded successfully!");
             System.out.println("Loaded " + successfulRecords + " employee records");
             isDataLoaded = true;
+            isSorted = false;  // Data is NOT sorted when first loaded
             
-            // Auto-sort data after loading
+            // Display original data (unsorted) after loading
             if (!employees.isEmpty()) {
-                System.out.println("Auto-sorting loaded data...");
-                quickSort(employees, 0, employees.size() - 1);
-                displayAllSortedEmployees();  // Display ALL employees after sorting
+                System.out.println("\nDisplaying ORIGINAL data (not sorted)...");
+                displayAllEmployees();
             }
             
             return true;
@@ -113,6 +115,13 @@ public class DepartmentStore {
             return;
         }
         
+        // Check if already sorted
+        if (isSorted) {
+            System.out.println("Data is already sorted!");
+            displayAllEmployees();
+            return;
+        }
+        
         System.out.println("Sorting " + employees.size() + " employees using Quick Sort...");
         
         // Measure sorting performance
@@ -120,8 +129,10 @@ public class DepartmentStore {
         quickSort(employees, 0, employees.size() - 1);
         long endTime = System.currentTimeMillis();
         
+        isSorted = true;  // Mark data as sorted
         System.out.println("Sorting completed in " + (endTime - startTime) + " ms");
-        displayAllSortedEmployees();  // Display ALL employees after sorting
+        System.out.println("\nDisplaying SORTED data:");
+        displayAllEmployees();
     }
     
      /**
@@ -136,7 +147,11 @@ public class DepartmentStore {
         }
         
         // Ensure data is sorted for binary search to work
-        quickSort(employees, 0, employees.size() - 1);
+        if (!isSorted) {
+            System.out.println("Data must be sorted before searching. Sorting now...");
+            quickSort(employees, 0, employees.size() - 1);
+            isSorted = true;
+        }
         
         // Perform binary search
         List<Employee> foundEmployees = performBinarySearch(searchName);
@@ -173,12 +188,28 @@ public class DepartmentStore {
                                           salary, department, position, jobTitle, company);
         employees.add(newEmployee);
         isDataLoaded = true;
+        isSorted = false;  // Data is no longer sorted after adding new record
         
-        System.out.println("Employee added successfully!");
-        System.out.println("Re-sorting employee list...");
+        // Display the newly added employee details
+        System.out.println("\n=== EMPLOYEE ADDED SUCCESSFULLY! ===");
+        System.out.println("=".repeat(100));
+        System.out.printf("%-15s %-15s %-8s %-25s %-10s %-20s %-15s %-20s %-15s\n", 
+            "First Name", "Last Name", "Gender", "Email", "Salary", "Department", "Position", "Job Title", "Company");
+        System.out.println("=".repeat(100));
+        System.out.printf("%-15s %-15s %-8s %-25s $%-9.2f %-20s %-15s %-20s %-15s\n",
+            newEmployee.getFirstName(),
+            newEmployee.getLastName(),
+            newEmployee.getGender(),
+            newEmployee.getEmail(),
+            newEmployee.getSalary(),
+            newEmployee.getDepartment(),
+            newEmployee.getPosition().isEmpty() ? "N/A" : newEmployee.getPosition(),
+            newEmployee.getJobTitle(),
+            newEmployee.getCompany());
+        System.out.println("=".repeat(100));
         
-        // Keep data sorted by re-sorting after addition
-        quickSort(employees, 0, employees.size() - 1);
+        System.out.println("\nNote: Data is now UNSORTED. Use option 1 to sort the data.");
+        System.out.println("Total employees: " + employees.size());
     }
     
     /**
@@ -206,7 +237,7 @@ public class DepartmentStore {
     }
     
     /**
-     * Display all employees in the system
+     * Display all employees in the system (in current order - sorted or unsorted)
      */
     public void displayAllEmployees() {
         if (!isDataLoaded || employees.isEmpty()) {
@@ -214,7 +245,9 @@ public class DepartmentStore {
             return;
         }
         
-        System.out.println("\nALL EMPLOYEES (" + employees.size() + " records)");
+        // Show status: sorted or original order
+        String status = isSorted ? "SORTED" : "ORIGINAL ORDER";
+        System.out.println("\nALL EMPLOYEES - " + status + " (" + employees.size() + " records)");
         System.out.println("=".repeat(100));
         System.out.printf("%-15s %-15s %-20s %-15s %-10s\n", 
             "First Name", "Last Name", "Department", "Position", "Salary");
@@ -229,6 +262,9 @@ public class DepartmentStore {
                 emp.getPosition().isEmpty() ? "N/A" : emp.getPosition(),
                 emp.getSalary());
         }
+        
+        System.out.println("=".repeat(100));
+        System.out.println("Total records displayed: " + employees.size());
     }
     
     // CORE ALGORITHM IMPLEMENTATIONS
@@ -399,31 +435,4 @@ public class DepartmentStore {
             }
         }
     }
-    
-  
-    /**
-     * Display all sorted employees in compact format
-     * Used after loading and sorting operations to show complete dataset
-     */
-    private void displayAllSortedEmployees() {
-        System.out.println("\nALL SORTED EMPLOYEES (" + employees.size() + " records)");
-        System.out.println("=".repeat(100));
-        System.out.printf("%-15s %-15s %-20s %-15s %-10s\n", 
-            "First Name", "Last Name", "Department", "Position", "Salary");
-        System.out.println("=".repeat(100));
-        
-        // Display all employees - no limit
-        for (Employee emp : employees) {
-            System.out.printf("%-15s %-15s %-20s %-15s $%-9.2f\n",
-                emp.getFirstName(),
-                emp.getLastName(),
-                emp.getDepartment(),
-                emp.getPosition().isEmpty() ? "N/A" : emp.getPosition(),
-                emp.getSalary());
-        }
-        
-        System.out.println("=".repeat(100));
-        System.out.println("Total records displayed: " + employees.size());
-    }
-    
 }

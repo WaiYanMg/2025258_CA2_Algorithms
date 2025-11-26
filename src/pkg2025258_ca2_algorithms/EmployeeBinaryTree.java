@@ -20,6 +20,7 @@ import java.util.Queue;
 
 public class EmployeeBinaryTree {
     
+    
     private TreeNode root;       // Root node of the tree
     private int nodeCount;      // Total number of nodes in tree
     private int maxHeight;      // Maximum height/depth of tree
@@ -134,5 +135,5 @@ public class EmployeeBinaryTree {
         System.out.println("\nTree Statistics:");
         System.out.println("Total nodes: " + nodeCount);
         System.out.println("Maximum height: " + maxHeight);
-    } 
+    }
 }

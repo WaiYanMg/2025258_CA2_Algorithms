@@ -13,7 +13,7 @@ package pkg2025258_ca2_algorithms;
 
 public class Department {
     
-    private static final String[] VALID_DEPARTMENTS = {
+     private static final String[] VALID_DEPARTMENTS = {
         "IT Development", "Sales", "HR", "Finance", "Marketing", 
         "Technical Support", "Customer Service", "Accounting", "Operations"
     };
