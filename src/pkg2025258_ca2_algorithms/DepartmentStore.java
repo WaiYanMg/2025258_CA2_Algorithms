@@ -21,7 +21,7 @@ import java.util.List;
  */
 public class DepartmentStore {
     
-    private ArrayList<Employee> employees;    // Stores all employee records
+   private ArrayList<Employee> employees;    // Stores all employee records
     private EmployeeBinaryTree employeeTree;  // For organizational hierarchy
     private boolean isDataLoaded;             // Flag to check if data is loaded
     private boolean isSorted;                 // Flag to check if data is sorted
@@ -179,6 +179,7 @@ public class DepartmentStore {
     
     /**
      * Add a new employee to the system
+     * Displays employee details VERTICALLY (one field per line)
      */
     public void addNewEmployee(String firstName, String lastName, String gender, String email,
                              double salary, String department, String position, 
@@ -190,25 +191,19 @@ public class DepartmentStore {
         isDataLoaded = true;
         isSorted = false;  // Data is no longer sorted after adding new record
         
-        // Display the newly added employee details
+        // Display the newly added employee details VERTICALLY
         System.out.println("\n=== EMPLOYEE ADDED SUCCESSFULLY! ===");
-        System.out.println("=".repeat(100));
-        System.out.printf("%-15s %-15s %-8s %-25s %-10s %-20s %-15s %-20s %-15s\n", 
-            "First Name", "Last Name", "Gender", "Email", "Salary", "Department", "Position", "Job Title", "Company");
-        System.out.println("=".repeat(100));
-        System.out.printf("%-15s %-15s %-8s %-25s $%-9.2f %-20s %-15s %-20s %-15s\n",
-            newEmployee.getFirstName(),
-            newEmployee.getLastName(),
-            newEmployee.getGender(),
-            newEmployee.getEmail(),
-            newEmployee.getSalary(),
-            newEmployee.getDepartment(),
-            newEmployee.getPosition().isEmpty() ? "N/A" : newEmployee.getPosition(),
-            newEmployee.getJobTitle(),
-            newEmployee.getCompany());
-        System.out.println("=".repeat(100));
-        
-        System.out.println("\nNote: Data is now UNSORTED. Use option 1 to sort the data.");
+        System.out.println("First Name: " + newEmployee.getFirstName());
+        System.out.println("Last Name: " + newEmployee.getLastName());
+        System.out.println("Gender: " + newEmployee.getGender());
+        System.out.println("Email: " + newEmployee.getEmail());
+        System.out.println("Salary: $" + String.format("%.2f", newEmployee.getSalary()));
+        System.out.println("Department: " + newEmployee.getDepartment());
+        System.out.println("Position: " + (newEmployee.getPosition().isEmpty() ? "N/A" : newEmployee.getPosition()));
+        System.out.println("Job Title: " + newEmployee.getJobTitle());
+        System.out.println("Company: " + newEmployee.getCompany());
+        System.out.println("=".repeat(40));
+        System.out.println("Note: Data is now UNSORTED. Use option 1 to sort the data.");
         System.out.println("Total employees: " + employees.size());
     }
     
