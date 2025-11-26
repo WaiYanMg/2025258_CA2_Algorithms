@@ -21,7 +21,7 @@ import java.util.List;
  */
 public class DepartmentStore {
     
-   private ArrayList<Employee> employees;    // Stores all employee records
+    private ArrayList<Employee> employees;    // Stores all employee records
     private EmployeeBinaryTree employeeTree;  // For organizational hierarchy
     private boolean isDataLoaded;             // Flag to check if data is loaded
     private boolean isSorted;                 // Flag to check if data is sorted
@@ -159,17 +159,18 @@ public class DepartmentStore {
         // Display results
         if (!foundEmployees.isEmpty()) {
             System.out.println("\nFOUND " + foundEmployees.size() + " EMPLOYEE(S):");
-            System.out.println("=".repeat(100));
-            System.out.printf("%-15s %-15s %-20s %-15s %-10s\n", 
-                "First Name", "Last Name", "Department", "Position", "Salary");
-            System.out.println("=".repeat(100));
+            System.out.println("=".repeat(120));
+            System.out.printf("%-15s %-15s %-20s %-15s %-30s %-12s\n", 
+                "First Name", "Last Name", "Department", "Position", "Email", "Salary");
+            System.out.println("=".repeat(120));
             
             for (Employee emp : foundEmployees) {
-                System.out.printf("%-15s %-15s %-20s %-15s $%-9.2f\n",
+                System.out.printf("%-15s %-15s %-20s %-15s %-30s $%-11.2f\n",
                     emp.getFirstName(),
                     emp.getLastName(),
                     emp.getDepartment(),
                     emp.getPosition().isEmpty() ? "N/A" : emp.getPosition(),
+                    emp.getEmail(),
                     emp.getSalary());
             }
         } else {
@@ -243,22 +244,23 @@ public class DepartmentStore {
         // Show status: sorted or original order
         String status = isSorted ? "SORTED" : "ORIGINAL ORDER";
         System.out.println("\nALL EMPLOYEES - " + status + " (" + employees.size() + " records)");
-        System.out.println("=".repeat(100));
-        System.out.printf("%-15s %-15s %-20s %-15s %-10s\n", 
-            "First Name", "Last Name", "Department", "Position", "Salary");
-        System.out.println("=".repeat(100));
+        System.out.println("=".repeat(120));
+        System.out.printf("%-15s %-15s %-20s %-15s %-30s %-12s\n", 
+            "First Name", "Last Name", "Department", "Position", "Email", "Salary");
+        System.out.println("=".repeat(120));
         
         // Display each employee in compact format
         for (Employee emp : employees) {
-            System.out.printf("%-15s %-15s %-20s %-15s $%-9.2f\n",
+            System.out.printf("%-15s %-15s %-20s %-15s %-30s $%-11.2f\n",
                 emp.getFirstName(),
                 emp.getLastName(),
                 emp.getDepartment(),
                 emp.getPosition().isEmpty() ? "N/A" : emp.getPosition(),
+                emp.getEmail(),
                 emp.getSalary());
         }
         
-        System.out.println("=".repeat(100));
+        System.out.println("=".repeat(120));
         System.out.println("Total records displayed: " + employees.size());
     }
     
