@@ -218,8 +218,8 @@ public class DepartmentStore {
         
         employeeTree = new EmployeeBinaryTree();
         
-        // Use first 20 employees for tree demonstration
-        int treeSize = Math.min(20, employees.size());
+        // Use ALL employees for tree
+        int treeSize = employees.size();
         System.out.println("Inserting " + treeSize + " employees using level-order insertion...");
         
         // Insert employees into tree
