@@ -206,6 +206,7 @@ public class DepartmentStore {
         System.out.println("=".repeat(40));
         System.out.println("Note: Data is now UNSORTED. Use option 1 to sort the data.");
         System.out.println("Total employees: " + employees.size());
+        displayAllEmployees();
     }
     
     /**
